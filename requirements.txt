@@ -1,0 +1,6 @@
+Flask
+tensorflow
+opencv-python
+numpy
+matplotlib
+werkzeug
