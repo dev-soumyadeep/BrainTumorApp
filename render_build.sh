@@ -13,4 +13,5 @@ git lfs install
 git lfs pull
 
 # Install Python dependencies
+pip install --upgrade pip
 pip install -r requirements.txt
