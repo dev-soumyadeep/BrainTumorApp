@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
-# Assume git-lfs is installed via apt.txt
+# Initialize Git LFS (git-lfs is installed via apt.txt or Dockerfile)
 git lfs install
 
-# Pull LFS files
+# Pull Git LFS files
 git lfs pull
 
 # Install Python dependencies

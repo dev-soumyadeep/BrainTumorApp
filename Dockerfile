@@ -10,7 +10,7 @@ RUN apt-get update && \
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy requirements.txt first, so Docker can cache the pip install layer if requirements don't change
+# Copy requirements.txt first for caching dependencies
 COPY requirements.txt .
 
 # Upgrade pip and install Python dependencies
@@ -19,8 +19,8 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy the rest of your application code to the container
 COPY . .
 
-# Expose the port that your Flask app uses
+# Expose the port your Flask app will run on
 EXPOSE 5000
 
-# Command to run your application (adjust if your app entry point is different)
+# Command to run your application (adjust if necessary)
 CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
