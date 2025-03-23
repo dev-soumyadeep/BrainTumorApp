@@ -1,7 +1,7 @@
 # Track .h5 model files with Git LFS
 *.h5 filter=lfs diff=lfs merge=lfs -text
 
-# Force Unix-style (LF) line endings for these files
+# Force Unix-style (LF) line endings for critical files
 render-build.sh text eol=lf
 requirements.txt text eol=lf
 Dockerfile text eol=lf
