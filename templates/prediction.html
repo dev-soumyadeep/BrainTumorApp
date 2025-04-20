@@ -31,14 +31,20 @@
     <!-- Buttons -->
     <a href="/" class="btn btn-secondary mt-3">Try Another Image</a>
 
-    {% if tumor_detected %}
+    {% if tumor_detected or show_classification_button %}
       <button id="contact-btn" class="btn btn-danger mt-3">Fetch Nearby Hospitals</button>
       <div id="hospital-results" class="mt-4 d-none">
         <h3>Nearby Hospitals</h3>
         <ul id="hospital-list" class="list-group"></ul>
       </div>
     {% endif %}
+
+  
+  {% if show_classification_button %}
+    <a href="{{ url_for('classify', filename=filename) }}" class="btn btn-warning mt-3">See Further Classification</a>
+  {% endif %}
   </div>
+
 
   <!-- Footer -->
   <footer class="mt-auto bg-dark text-light text-center py-3">
