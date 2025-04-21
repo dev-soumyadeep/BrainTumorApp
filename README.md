@@ -42,7 +42,7 @@ Follow these steps to run the project locally.
 
 ```bash
 git clone https://github.com/Ayush-Dutta/BrainTumorApp.git
-cd brain-tumor-detection
+cd BrainTumorApp
 ```
 ### 2. Create and Activate a Virtual Environment
 
