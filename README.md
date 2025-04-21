@@ -19,8 +19,8 @@ It also features a hospital locator to find nearby hospitals based on your curre
 ## 📸 Sample Screens
 
 > Upload MRI image → View results → See nearby hospitals  
-![Sample](static/sample-ui.png)  
-*(Add your own screenshots here if available)*
+![Sample](static/Screenshot 2025-04-21 111715.png)  
+
 
 ---
 
