@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: brain-tumor-app
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn App:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
