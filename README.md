@@ -32,6 +32,9 @@ It also features a hospital locator to find nearby hospitals based on your curre
 ### 🔹 Nearby Hospitals
 ![Hospitals](static/screenshots/hospital.png)
 
+### 🔹 Downloaded Report
+![Report](static/screenshots/report.png)
+
 ---
 
 ## 🛠️ Setup Instructions
