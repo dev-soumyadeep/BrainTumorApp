@@ -40,7 +40,7 @@
     <nav class="navbar navbar-dark bg-dark px-3">
       <a class="navbar-brand" href="{{ url_for('upload_file') }}">
         <img
-          src="https://img.freepik.com/free-psd/brain-outline-illustration_23-2150761744.jpg?t=st=1742792102~exp=1742795702~hmac=464d69a3805298760566360ec4ff42972ab422f0c125c02b09a1e1fd2d5ecffd&w=740"
+          src="https://img.freepik.com/free-psd/brain-outline-illustration_23-2150761744.jpg"
           width="40"
           height="40"
           class="d-inline-block align-top"
@@ -65,10 +65,21 @@
 
           <!-- Buttons Row -->
           <div class="d-flex justify-content-center gap-3 mb-3">
-            <!-- Fetch Nearby Hospitals Button -->
             <button id="contact-btn" class="btn btn-danger">Fetch Nearby Hospitals</button>
-            <!-- Back to Home Button -->
+            <a href="{{ url_for('download_report', filename=filename) }}" class="btn btn-success">Download Report</a>
             <a href="{{ url_for('upload_file') }}" class="btn btn-outline-primary">Back to Home</a>
+          </div>
+
+          <!-- Tumor Description and Medications -->
+          <div id="tumor-info" class="text-start mb-4 px-3">
+            <h5>Description</h5>
+            <p>{{ tumor_description }}</p>
+            <h5>Recommended Medications</h5>
+            <ul>
+              {% for med in medications %}
+                <li>{{ med }}</li>
+              {% endfor %}
+            </ul>
           </div>
 
           <!-- Hospital Results -->

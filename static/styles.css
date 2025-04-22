@@ -1,16 +1,27 @@
-/* style.css */
+:root {
+  --bg-light: #f8f9fa;
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --card-radius: 12px;
+  --primary: #007bff;
+  --success: #28a745;
+  --footer-bg: #343a40;
+  --footer-text: #adb5bd;
+  --footer-hover-bg: #23272b;
+}
+
 body {
-  background-color: #f8f9fa; /* Soft light gray */
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: var(--bg-light);
+  font-family: var(--font-sans);
   transition: background-color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5 {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans);
 }
 
+/* Card styling */
 .card {
-  border-radius: 12px;
+  border-radius: var(--card-radius);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
@@ -19,6 +30,7 @@ h1, h2, h3, h4, h5 {
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
 
+/* Button styling */
 .btn {
   border-radius: 20px;
   transition: transform 0.2s ease, background-color 0.2s ease;
@@ -27,6 +39,18 @@ h1, h2, h3, h4, h5 {
 }
 .btn:hover {
   transform: scale(1.05);
+}
+
+/* Ensure .btn-success uses theme variable */
+.btn-success {
+  background-color: var(--success);
+  border-color: var(--success);
+}
+
+/* Focus outline for accessibility */
+.btn:focus {
+  outline: 3px solid rgba(0,123,255,0.5);
+  outline-offset: 2px;
 }
 
 /* Button ripple effect */
@@ -46,7 +70,7 @@ h1, h2, h3, h4, h5 {
   transition: opacity 0s;
 }
 
-/* Heading animation */
+/* Heading animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -62,8 +86,7 @@ h1, h2, h3, h4, h5 {
   animation: fadeInUp 0.6s ease-out;
 }
 
-/* Hospital list styling */
-#hospital-results h3,
+/* Hospital list styling - tightened selector */
 #hospital-results h5 {
   animation: fadeInUp 0.6s ease-out;
 }
@@ -79,16 +102,23 @@ h1, h2, h3, h4, h5 {
 
 /* Link hover effect */
 a.btn-outline-primary:hover {
-  background-color: #007bff;
+  background-color: var(--primary);
   color: #fff;
 }
 
 /* Footer styling */
 footer {
-  background-color: #343a40;
-  color: #adb5bd;
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
   transition: background-color 0.3s ease;
 }
 footer:hover {
-  background-color: #23272b;
+  background-color: var(--footer-hover-bg);
+}
+
+/* Responsive tweaks */
+@media (max-width: 400px) {
+  .card {
+    padding: 1rem;
+  }
 }
