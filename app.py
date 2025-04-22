@@ -5,11 +5,15 @@ from werkzeug.utils import secure_filename
 import numpy as np
 import cv2
 from tensorflow.keras.models import load_model
+from datetime import datetime
 from flask import send_file
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+from reportlab.lib.utils import ImageReader
 from io import BytesIO
 from datetime import datetime
+from reportlab.platypus import Paragraph, Frame
+from reportlab.lib.styles import getSampleStyleSheet
 
 app = Flask(__name__)
 
@@ -40,9 +44,11 @@ tumor_labels = ['Glioma', 'Meningioma', 'Pituitary', 'Other']
 
 # Tumor info lookups
 tumor_descriptions = {
-    'Glioma':     "Gliomas are tumors that arise from glial cells in the brain and spine. They can be slow or fast growing.",
-    'Meningioma': "Meningiomas develop from the meninges, the membranes that surround your brain and spinal cord. Typically benign.",
-    'Pituitary':  "Pituitary tumors occur in the pituitary gland and can affect hormone production.",
+    'Glioma':     "Gliomas are tumors that arise from glial cells in the brain and spine. They can be slow or fast growing.Glioma is a common type of tumor originating in the brain, but it can sometimes be found in the spinal cord. About 33% of all brain tumors are gliomas. These tumors arise from the glial cells that surround and support neurons. There are several types of glial cells, hence there are many types of gliomas, including: astrocytomas, oligodendrogliomas, and ependymomas. Gliomas can be classified as low-grade (slow-growing) or high-grade (fast-growing). High-grade gliomas are more aggressive and can be life-threatening. The most common type of glioma is glioblastoma multiforme (GBM), which is a high-grade tumor. Gliomas can occur at any age but are more common in adults.The understanding of gliomas has been evolving over the years. Depending on the type of cells that are forming the glioma and their genetic mutations, those tumors can be more or less aggressive. A genetic study of the tumor is often performed to better understand how it may behave. For example, diffuse midline gliomas or hemispheric gliomas are newly described types of gliomas that have specific mutations associated with a more aggressive nature. ",
+    
+    'Meningioma': "Meningiomas develop from the meninges, the membranes that surround your brain and spinal cord. Typically benign.Meningioma is the most common primary brain tumor, accounting for more than 30% of all brain tumors. Meningiomas originate in the meninges, the outer three layers of tissue that cover and protect the brain just under the skull. Women are diagnosed with meningiomas more often than men. About 85% of meningiomas are noncancerous, slow-growing tumors. Almost all meningiomas are considered benign, but some meningiomas can be persistent and come back after treatment.",
+    
+    'Pituitary':  "Pituitary tumors occur in the pituitary gland and can affect hormone production.Adenoma, a type of tumor that grows in the gland tissues, is the most common type of pituitary tumor. Pituitary adenomas develop from the pituitary gland and tend to grow at a slow rate. About 10% of primary brain tumors are diagnosed as adenomas. They can cause vision and endocrinological problems. Fortunately for patients affected by them, adenomas are benign and treatable with surgery and/or medication.",
     'Other':      "Other less common or unspecified tumor types."
 }
 
@@ -179,10 +185,10 @@ def classify(filename):
 @app.route('/download_report/<filename>')
 def download_report(filename):
     try:
-        # Get image path
+        # Image path
         img_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-        # Re-run classification to get tumor type
+        # Read and preprocess image
         img_raw = cv2.imread(img_path)
         if img_raw is None:
             return "Unable to read image for report."
@@ -207,35 +213,63 @@ def download_report(filename):
         # Create PDF in memory
         buffer = BytesIO()
         p = canvas.Canvas(buffer, pagesize=letter)
-        width, height = letter
+        pdf_width, pdf_height = letter
 
-        # Title
+        # Header
         p.setFont("Helvetica-Bold", 16)
-        p.drawString(50, height - 50, "Brain Tumor Detection Report")
+        p.drawString(50, pdf_height - 50, "Brain Tumor Detection Report")
 
         # Metadata
         p.setFont("Helvetica", 12)
-        p.drawString(50, height - 80, f"Filename: {filename}")
-        p.drawString(50, height - 100, f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        p.drawString(50, pdf_height - 80, f"Filename: {filename}")
+        p.drawString(50, pdf_height - 100, f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
         # Tumor Type
         p.setFont("Helvetica-Bold", 14)
-        p.drawString(50, height - 140, f"Tumor Type: {final_label}")
+        p.drawString(50, pdf_height - 140, f"Tumor Type: {final_label}")
 
-        # Description
-        p.setFont("Helvetica", 12)
-        p.drawString(50, height - 170, "Description:")
-        text_object = p.beginText(60, height - 190)
-        for line in description.split('. '):
-            text_object.textLine(line.strip())
-        p.drawText(text_object)
+        # MRI Image in PDF
+        image_reader = ImageReader(img_path)
+        image_width = 200
+        image_height = 200
+        p.drawImage(image_reader, pdf_width - image_width - 50, pdf_height - image_height - 140, 
+                    width=image_width, height=image_height)
+
+       # Set label for description
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, pdf_height - 360, "Description:")
+
+        # Prepare paragraph style
+        styles = getSampleStyleSheet()
+        desc_para = Paragraph(description, styles["Normal"])
+
+        # Create a frame to render the paragraph inside the page margins
+        desc_frame = Frame(
+            50,                    # X position
+            pdf_height - 520,      # Y position (top-down)
+            pdf_width - 100,       # Width (full width minus side margins)
+            140                    # Height of the description box
+        )
+
+        # Draw the paragraph inside the frame
+        desc_frame.addFromList([desc_para], p)
 
         # Medications
-        p.drawString(50, height - 330, "Recommended Medications:")
-        y_pos = height - 350
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, pdf_height - 550, "Recommended Medications:")
+
+        p.setFont("Helvetica", 11)
+        y_med = pdf_height - 570
         for med in meds:
-            p.drawString(70, y_pos, f"- {med}")
-            y_pos -= 20
+            p.drawString(70, y_med, f"- {med}")
+            y_med -= 18
+
+
+        # Get Well Soon WordArt-like message
+        p.setFont("Helvetica-BoldOblique", 18)
+        p.setFillColorRGB(0.8, 0.1, 0.5)  # pinkish-purple
+        p.drawCentredString(pdf_width / 2, 80, "💖 Get Well Soon! 💖")
+
 
         # Finalize PDF
         p.showPage()
