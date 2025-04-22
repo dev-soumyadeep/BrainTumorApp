@@ -18,9 +18,19 @@ It also features a hospital locator to find nearby hospitals based on your curre
 
 ## 📸 Sample Screens
 
-> Upload MRI image → View results → See nearby hospitals  
-![Sample](static/Screenshot 2025-04-21 111715.png)  
+> Upload MRI image → View results → See nearby hospitals
 
+### 🔹 Upload Page
+![Upload](static/screenshots/upload.png)
+
+### 🔹 Detection Result
+![Detection](static/screenshots/prediction.png)
+
+### 🔹 Classification Result
+![Classification](static/screenshots/classification.png)
+
+### 🔹 Nearby Hospitals
+![Hospitals](static/screenshots/hospital.png)
 
 ---
 
@@ -31,8 +41,8 @@ Follow these steps to run the project locally.
 ### 1. Clone the Repository and Enter the Directory
 
 ```bash
-git clone https://github.com/your-username/brain-tumor-detection.git
-cd brain-tumor-detection
+git clone https://github.com/Ayush-Dutta/BrainTumorApp.git
+cd BrainTumorApp
 ```
 ### 2. Create and Activate a Virtual Environment
 
